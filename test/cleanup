@@ -1,0 +1,3 @@
+mv output.R.0 keep
+/bin/rm -f output.* fort.*
+mv keep output.R.0

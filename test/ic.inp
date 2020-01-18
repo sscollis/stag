@@ -1,0 +1,25 @@
+&IN
+BASE    = 'output'
+RE      = 200.0, 
+NSTEP   = 0,
+NOUT    = 100,
+CFL_MAX = 2.0,
+DT_MAX  = 0.05,
+TOL     = 1.0e-7,
+ICTYPE  = 0, 
+METHOD  = 0,
+PMETHOD = 0,
+AXIS    = F 
+KMAX    = 5000
+OMEGA   = 0 
+DTAU    = 10.0
+DELTA_P = .TRUE.
+ALFA	= 0.92
+BOTTOM_BC = 0
+TOP_BC    = 0
+LEFT_BC   = 0
+RIGHT_BC  = 0
+/
+
+OMEGA = 1.82 for SOR (128 x 128)
+OMEGA = 1.65 for SOR (32 x 32)
