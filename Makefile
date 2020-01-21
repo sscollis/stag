@@ -22,12 +22,15 @@ F77     = gfortran
 #
 #  All objects are listed here
 #
-OBJS = stag.o getver.o
+OBJS = stag.o stag_v6.o getver.o
 
 all: $(NAME) mkgrid d2s
 
 $(NAME): $(OBJS)
 	$(COMP) $(OFLAGS) $(OBJS) $(LIB) -o $(NAME)
+
+stag_v6: $(OBJS)
+	$(COMP) $(OFLAGS) stag_v6.o getver.o $(LIB) -o stag_v6
 
 mkgrid: mkgrid.o
 	$(COMP) $(FLAGS) $(DEBUG) -o mkgrid mkgrid.o
