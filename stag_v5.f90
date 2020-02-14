@@ -185,17 +185,17 @@ program Navier_Stokes
       open(istat,file=filen,status='unknown')
 
       if (ictype.eq.0) then
-	call ic
+        call ic
       else if (ictype.eq.1) then
-	call restart
+        call restart
       else
-	call error('Navier-Stokes$','Illegal value of ictype$')
+        call error('Navier-Stokes$','Illegal value of ictype$')
       end if
 
       if (method .eq. 0) then
-	call driver                   ! Runge-Kutta 2
+        call driver                   ! Runge-Kutta 2
       else
-	call error('Navier-Stokes$','Illegal value of method$')
+        call error('Navier-Stokes$','Illegal value of method$')
       end if
 
       stop
@@ -236,13 +236,13 @@ subroutine driver
             end do
           end do
         endif
-	
-	n = n + 1
+        
+        n = n + 1
 
 !.... first RK sub-step
 
-	call calc_u( delta_p )
-	call calc_v( delta_p )
+        call calc_u( delta_p )
+        call calc_v( delta_p )
 
         time = time + pt5 * dt
         fact = pt5 * dt
@@ -254,12 +254,12 @@ subroutine driver
           end do
         end do
 
-	call calc_p( pt5 * dt, u, v, .true. )
+        call calc_p( pt5 * dt, u, v, .true. )
 
 !.... second RK sub-step
 
-	call calc_u( delta_p )
-	call calc_v( delta_p )
+        call calc_u( delta_p )
+        call calc_v( delta_p )
 
         time = time + pt5 * dt
         fact = dt
@@ -271,7 +271,7 @@ subroutine driver
           end do
         end do
 
-	call calc_p ( dt, u, v, .true. )
+        call calc_p ( dt, u, v, .true. )
 
         if (delta_p) then
 !$omp parallel do private(i)
@@ -283,12 +283,12 @@ subroutine driver
         endif
 
         cpu2 = second()
-	write(*,"(i5,5(1x,1pe10.3))") n, time, dt, cfl, cpu2, cpu2-cpu
-	write(ihist,"(i5,5(1x,1pe10.3))") n, time, dt, cfl, cpu2, cpu2-cpu
-	cpu = cpu2
+        write(*,"(i5,5(1x,1pe10.3))") n, time, dt, cfl, cpu2, cpu2-cpu
+        write(ihist,"(i5,5(1x,1pe10.3))") n, time, dt, cfl, cpu2, cpu2-cpu
+        cpu = cpu2
 
         call interp
-	call setdt
+        call setdt
         call stats
 
         call flush(ipres); call flush(istat); call flush(ihist)
@@ -338,9 +338,9 @@ subroutine calc_u( include_p )
 !$omp parallel do private(i,sn,ss,se,sw,dn,ds,de,dw,cn,cs,ce,cw) &
 !$omp& private(dynr,dysr,dxer,volr)
       do j = 2, nym
-	sw = pt5 * (r(j)+r(j-1)) * (y(j)-y(j-1))
-	dw = vis * sw * dxwr
-	cw = pt5 * ( cx(2,j) + cx(1,j) )
+        sw = pt5 * (r(j)+r(j-1)) * (y(j)-y(j-1))
+        dw = vis * sw * dxwr
+        cw = pt5 * ( cx(2,j) + cx(1,j) )
 
         se = pt5*(r(j)+r(j-1)) * (y(j)-y(j-1))
         dynr = one / ( yc(j+1) - yc(j) )
@@ -351,34 +351,34 @@ subroutine calc_u( include_p )
         do i = 2, nxmm
 
           ss = r(j-1) * (xc(i+1) - xc(i))
-	  sn = r(j) * (xc(i+1) - xc(i))
+          sn = r(j) * (xc(i+1) - xc(i))
 
           dxer = one / ( x(i+1)-x(i) )
 
-	  cn = pt5 * ( cy(i,j) + cy(i+1,j) )
+          cn = pt5 * ( cy(i,j) + cy(i+1,j) )
           cs = pt5 * ( cy(i,j-1) + cy(i+1,j-1) )
-	  ce = pt5 * ( cx(i,j) + cx(i+1,j) )
+          ce = pt5 * ( cx(i,j) + cx(i+1,j) )
 
-	  dn = vis * sn * dynr
+          dn = vis * sn * dynr
           ds = vis * ss * dysr
-	  de = vis * se * dxer
+          de = vis * se * dxer
 
           volr = one / ((y(j)-y(j-1))*(xc(i+1)-xc(i)))
 
-	  ru(i,j) =  volr * ( &
-	        pt5 * ( (u(i,j)+u(i-1,j))*cw - (u(i+1,j)+u(i,j))*ce ) - &
-	        cn * ( u(i,j+1) * fy(j) + u(i,j) * (one-fy(j)) ) + &
-		cs * ( u(i,j) * fy(j-1) + u(i,j-1) * (one-fy(j-1)) ) + &
-		de * ( u(i+1,j)-u(i,j) ) - dw * ( u(i,j)-u(i-1,j) ) + &
-		dn * ( u(i,j+1)-u(i,j) ) - ds * ( u(i,j)-u(i,j-1) ) )
+          ru(i,j) =  volr * ( &
+                pt5 * ( (u(i,j)+u(i-1,j))*cw - (u(i+1,j)+u(i,j))*ce ) - &
+                cn * ( u(i,j+1) * fy(j) + u(i,j) * (one-fy(j)) ) + &
+                cs * ( u(i,j) * fy(j-1) + u(i,j-1) * (one-fy(j-1)) ) + &
+                de * ( u(i+1,j)-u(i,j) ) - dw * ( u(i,j)-u(i-1,j) ) + &
+                dn * ( u(i,j+1)-u(i,j) ) - ds * ( u(i,j)-u(i,j-1) ) )
 
           if (include_p) then
             ru(i,j) = ru(i,j) + volr * ( sw * p_old(i,j) - se * p_old(i+1,j) )
           end if
 
-	  sw = se
-	  dw = de
-	  cw = ce
+          sw = se
+          dw = de
+          cw = ce
 
         end do
       end do
@@ -403,9 +403,9 @@ subroutine calc_v( include_p )
 !$omp parallel do private(i,sn,ss,se,sw,dn,ds,de,dw,cn,cs,ce,cw) &
 !$omp& private(dynr,dysr,dxer,volr)
       do j = 2, nymm
-	sw = pt5 * (r(j+1)+r(j-1)) * (yc(j+1)-yc(j))
-	dw = vis * sw * dxwr
-	cw = pt5 * ( cx(1,j) + cx(1,j+1) )
+        sw = pt5 * (r(j+1)+r(j-1)) * (yc(j+1)-yc(j))
+        dw = vis * sw * dxwr
+        cw = pt5 * ( cx(1,j) + cx(1,j+1) )
 
         se = pt5 * (r(j+1)+r(j-1)) * (yc(j+1) - yc(j))
         dynr = one / ( y(j+1)-y(j) )
@@ -416,34 +416,34 @@ subroutine calc_v( include_p )
         do i = 2, nxm
 
           ss = pt5 * (r(j)+r(j-1)) * (x(i) - x(i-1))
-	  sn = pt5 * (r(j+1)+r(j)) * (x(i) - x(i-1))
+          sn = pt5 * (r(j+1)+r(j)) * (x(i) - x(i-1))
 
           dxer = one / ( xc(i+1)-xc(i) )
 
-	  cn = pt5 * ( cy(i,j+1) + cy(i,j) )
+          cn = pt5 * ( cy(i,j+1) + cy(i,j) )
           cs = pt5 * ( cy(i,j) + cy(i,j-1) )
-	  ce = pt5 * ( cx(i,j+1) + cx(i,j) )
+          ce = pt5 * ( cx(i,j+1) + cx(i,j) )
 
-	  dn = vis * sn * dynr
+          dn = vis * sn * dynr
           ds = vis * ss * dysr
-	  de = vis * se * dxer
+          de = vis * se * dxer
 
           volr = one / ((x(i)-x(i-1))*(yc(j+1)-yc(j))) 
 
-	  rv(i,j) = volr * ( &
-	        pt5 * ( (v(i,j)+v(i,j-1))*cs - (v(i,j+1)+v(i,j))*cn ) - &
-	        ce * ( v(i+1,j) * fx(i) + v(i,j) * (one-fx(i)) ) + &
-		cw * ( v(i,j) * fx(i-1) + v(i-1,j) * (one-fx(i-1)) ) + &
-		de * ( v(i+1,j)-v(i,j) ) - dw * ( v(i,j)-v(i-1,j) ) + &
-		dn * ( v(i,j+1)-v(i,j) ) - ds * ( v(i,j)-v(i,j-1) ) )
+          rv(i,j) = volr * ( &
+                pt5 * ( (v(i,j)+v(i,j-1))*cs - (v(i,j+1)+v(i,j))*cn ) - &
+                ce * ( v(i+1,j) * fx(i) + v(i,j) * (one-fx(i)) ) + &
+                cw * ( v(i,j) * fx(i-1) + v(i-1,j) * (one-fx(i-1)) ) + &
+                de * ( v(i+1,j)-v(i,j) ) - dw * ( v(i,j)-v(i-1,j) ) + &
+                dn * ( v(i,j+1)-v(i,j) ) - ds * ( v(i,j)-v(i,j-1) ) )
 
           if (include_p) then
             rv(i,j) = rv(i,j) + volr * (ss * p_old(i,j) - sn * p_old(i,j+1))
           end if
 
-	  sw = se
-	  dw = de
-	  cw = ce
+          sw = se
+          dw = de
+          cw = ce
 
         end do
       end do
@@ -497,7 +497,7 @@ subroutine calc_p( dtl, ul, vl, project )
       do i = 2, nxm
         ss = r(1) * (x(i) - x(i-1))
         ds = ss * dysr
-	cy(i,1) = rho * ss * vl(i,1)
+        cy(i,1) = rho * ss * vl(i,1)
       end do
 
 !.... initialize quantities along the west boundary
@@ -505,9 +505,9 @@ subroutine calc_p( dtl, ul, vl, project )
       dxwr = one / (xc(2)-xc(1))
 !$omp parallel do private(i,sn,ss,se,sw,dynr,dysr,dxer,dn,ds,de,dw)
       do j = 2, nym
-	sw = pt5 * (r(j)+r(j-1)) * (y(j)-y(j-1))
-	dw = sw * dxwr
-	cx(1,j) = rho * sw * ul(1,j)
+        sw = pt5 * (r(j)+r(j-1)) * (y(j)-y(j-1))
+        dw = sw * dxwr
+        cx(1,j) = rho * sw * ul(1,j)
 
         se = pt5 * (r(j)+r(j-1)) * (y(j)-y(j-1))
         dynr = one / (yc(j+1) - yc(j))
@@ -516,27 +516,27 @@ subroutine calc_p( dtl, ul, vl, project )
 !.... main loop - east and north sides
 
         do i = 2, nxm
-	
+        
           ss = r(j-1) * (x(i) - x(i-1))
-	  sn = r(j) * (x(i) - x(i-1))
-	  
+          sn = r(j) * (x(i) - x(i-1))
+          
           dxer = one / ( xc(i+1)-xc(i) )
 
-	  cx(i,j) = rho * se * ul(i,j)
-	  cy(i,j) = rho * sn * vl(i,j)
+          cx(i,j) = rho * se * ul(i,j)
+          cy(i,j) = rho * sn * vl(i,j)
 
-	  dn = sn * dynr
-	  ds = ss * dysr
-	  de = se * dxer
+          dn = sn * dynr
+          ds = ss * dysr
+          de = se * dxer
 
-	  ae(i,j) = de
-	  aw(i,j) = dw
-	  an(i,j) = dn
-	  as(i,j) = ds
+          ae(i,j) = de
+          aw(i,j) = dw
+          an(i,j) = dn
+          as(i,j) = ds
 
-	  dw = de
+          dw = de
 
-	end do
+        end do
       end do
 
 !.... form the RHS
@@ -545,8 +545,8 @@ subroutine calc_p( dtl, ul, vl, project )
 !$omp parallel do private(i) reduction(+:psum)
       do j = 2, nym
         do i = 2, nxm
-	  rp(i,j) = ( cx(i,j) + cy(i,j) - cx(i-1,j) - cy(i,j-1) )
-	  psum = psum + rp(i,j)**2
+          rp(i,j) = ( cx(i,j) + cy(i,j) - cx(i-1,j) - cy(i,j-1) )
+          psum = psum + rp(i,j)**2
         end do
       end do
 
@@ -568,8 +568,8 @@ subroutine calc_p( dtl, ul, vl, project )
 !$omp parallel do private(i)
       do j = 2, nym
         do i = 2, nxm
-	  ap(i,j) = -(ae(i,j)+aw(i,j)+an(i,j)+as(i,j))
-	end do
+          ap(i,j) = -(ae(i,j)+aw(i,j)+an(i,j)+as(i,j))
+        end do
       end do
 
       if (pmethod .eq. 0) then
@@ -588,44 +588,44 @@ subroutine calc_p( dtl, ul, vl, project )
 
 !$omp parallel do private(i,se)
       do j = 2, nym
-	do i = 2, nxmm
-	  se = pt5 * (r(j)+r(j-1)) * (y(j)-y(j-1))
-	  ul(i,j) = ul(i,j) - se * ( p(i+1,j) - p(i,j) ) / &
+        do i = 2, nxmm
+          se = pt5 * (r(j)+r(j-1)) * (y(j)-y(j-1))
+          ul(i,j) = ul(i,j) - se * ( p(i+1,j) - p(i,j) ) / &
                    ( rho * (xc(i+1)-xc(i))*(y(j)-y(j-1)) )
-	  cx(i,j) = rho * se * ul(i,j)
-	end do
+          cx(i,j) = rho * se * ul(i,j)
+        end do
       end do
 
 !.... correct v-velocity and Cy mass flux
 
 !$omp parallel do private(i,sn)
       do j = 2, nymm
-	do i = 2, nxm
-	  sn = r(j) * ( x(i) - x(i-1) )
-	  vl(i,j) = vl(i,j) - sn * ( p(i,j+1) - p(i,j) ) / &
-	           ( rho * (x(i)-x(i-1)) * (yc(j+1)-yc(j)) )
-	  cy(i,j) = rho * sn * vl(i,j)
-	end do
+        do i = 2, nxm
+          sn = r(j) * ( x(i) - x(i-1) )
+          vl(i,j) = vl(i,j) - sn * ( p(i,j+1) - p(i,j) ) / &
+                   ( rho * (x(i)-x(i-1)) * (yc(j+1)-yc(j)) )
+          cy(i,j) = rho * sn * vl(i,j)
+        end do
       end do
 
       else
 
 !$omp parallel do private(i,se)
       do j = 2, nym
-	do i = 2, nxmm
-	  se = pt5 * (r(j)+r(j-1)) * (y(j)-y(j-1))
-	  cx(i,j) = rho * se * u(i,j)
-	end do
+        do i = 2, nxmm
+          se = pt5 * (r(j)+r(j-1)) * (y(j)-y(j-1))
+          cx(i,j) = rho * se * u(i,j)
+        end do
       end do
 
 !.... correct v-velocity and Cy mass flux
 
 !$omp parallel do private(i,sn)
       do j = 2, nymm
-	do i = 2, nxm
-	  sn = r(j) * ( x(i) - x(i-1) )
-	  cy(i,j) = rho * sn * v(i,j)
-	end do
+        do i = 2, nxm
+          sn = r(j) * ( x(i) - x(i-1) )
+          cy(i,j) = rho * sn * v(i,j)
+        end do
       end do
 
       end if
@@ -649,11 +649,11 @@ subroutine calc_p( dtl, ul, vl, project )
       tdiv = zero
 !$omp parallel do private(i) reduction(+: psum, tdiv) reduction(max: pmax)
       do j = 2, nym
-	do i = 2, nxm
-	  psum = psum + p(i,j)**2
-	  pmax = max(abs(p(i,j)),pmax)
+        do i = 2, nxm
+          psum = psum + p(i,j)**2
+          pmax = max(abs(p(i,j)),pmax)
           tdiv = tdiv + (cx(i,j) + cy(i,j) - cx(i-1,j) - cy(i,j-1))**2
-	end do
+        end do
       end do
       psum = sqrt( psum / (nxmm*nymm) )
       tdiv = sqrt( tdiv / (nxmm*nymm) )
@@ -774,13 +774,13 @@ subroutine point_gs_sor( rp, aw, ae, as, an, ap )
 !.... solve for pressure using point GS-SOR
 
 !$omp parallel do private(i)
-	do j = 2, nym
-	  do i = 2, nxm
-	    p(i,j) = (one-omega)*p(i,j) - omega * ( ae(i,j) * p(i+1,j) + &
+        do j = 2, nym
+          do i = 2, nxm
+            p(i,j) = (one-omega)*p(i,j) - omega * ( ae(i,j) * p(i+1,j) + &
                      an(i,j) * p(i,j+1) + aw(i,j) * p(i-1,j) + &
                      as(i,j) * p(i,j-1) - rp(i,j) ) / ap(i,j)
-	  end do
-	end do
+          end do
+        end do
 
 !.... ensure that boundary conditions are fixed
 
@@ -844,26 +844,26 @@ subroutine line_gs_sor( rp, aw, ae, as, an, ap )
 
 !.... solve for pressure using line GS-SOR in y
 
-!!$	do i = 2, nxm
-!!$	  dp(i,2:nym) = -ae(i,2:nym) * p(i+1,2:nym) - &
-!!$	                 aw(i,2:nym) * p(i-1,2:nym) + rp(i,2:nym)
-!!$	  call TRDIAG( nymm, as(i,2:nym), ap(i,2:nym), &
-!!$                       an(i,2:nym), dp(i,2:nym), dp(i,2:nym) )	  
-!!$	  p(i,2:nym) = (one-omega)*p(i,2:nym) + omega*dp(i,2:nym)
-!!$	end do
+!!$     do i = 2, nxm
+!!$       dp(i,2:nym) = -ae(i,2:nym) * p(i+1,2:nym) - &
+!!$                      aw(i,2:nym) * p(i-1,2:nym) + rp(i,2:nym)
+!!$       call TRDIAG( nymm, as(i,2:nym), ap(i,2:nym), &
+!!$                       an(i,2:nym), dp(i,2:nym), dp(i,2:nym) )         
+!!$       p(i,2:nym) = (one-omega)*p(i,2:nym) + omega*dp(i,2:nym)
+!!$     end do
 !!$
-!!$	p(2:nxm,2:nym) = p(2:nxm,2:nym) - p(2,2)  ! hold a point fixed
+!!$     p(2:nxm,2:nym) = p(2:nxm,2:nym) - p(2,2)  ! hold a point fixed
 
 !.... solve for pressure using line GS-SOR in x
 
 !$omp parallel do shared(nxmm)
-	do j = 2, nym
-	  dp(2:nxm,j) = -an(2:nxm,j) * p(2:nxm,j+1) - &
-	                 as(2:nxm,j) * p(2:nxm,j-1) + rp(2:nxm,j)
-	  call TRDIAG( nxmm, aw(2:nxm,j), ap(2:nxm,j), &
-                       ae(2:nxm,j), dp(2:nxm,j), dp(2:nxm,j) )	  
-	  p(2:nxm,j) = (one-omega)*p(2:nxm,j) + omega*dp(2:nxm,j)
-	end do
+        do j = 2, nym
+          dp(2:nxm,j) = -an(2:nxm,j) * p(2:nxm,j+1) - &
+                         as(2:nxm,j) * p(2:nxm,j-1) + rp(2:nxm,j)
+          call TRDIAG( nxmm, aw(2:nxm,j), ap(2:nxm,j), &
+                       ae(2:nxm,j), dp(2:nxm,j), dp(2:nxm,j) )    
+          p(2:nxm,j) = (one-omega)*p(2:nxm,j) + omega*dp(2:nxm,j)
+        end do
 
         pl = p(2,2)
 !$omp parallel do private(i)
@@ -909,29 +909,29 @@ subroutine adi( rp, aw, ae, as, an, ap )
 !.... solve for pressure using ADI
 
 !$omp parallel do private(i)
-	do j = 2, nym
-	  do i = 2, nxm
-	    dp(i,j) = dtau * ( ap(i,j) * p(i,j)   + ae(i,j) * p(i+1,j) + &
+        do j = 2, nym
+          do i = 2, nxm
+            dp(i,j) = dtau * ( ap(i,j) * p(i,j)   + ae(i,j) * p(i+1,j) + &
                       an(i,j) * p(i,j+1) + aw(i,j) * p(i-1,j) + &
                       as(i,j) * p(i,j-1) - rp(i,j) )
-	  end do
-	end do
+          end do
+        end do
 
 !$omp parallel do shared( nymm )
-	do i = 2, nxm
-	  call TRDIAG( nymm, &
+        do i = 2, nxm
+          call TRDIAG( nymm, &
                        -dtau * as(i,2:nym), &
                         one + dtau * ( as(i,2:nym) + an(i,2:nym) ), &
                        -dtau * an(i,2:nym), dp(i,2:nym), dp(i,2:nym) ) 
-	end do
+        end do
 
 !$omp parallel do shared( nxmm )
-	do j = 2, nym
-	  call TRDIAG( nxmm, &
+        do j = 2, nym
+          call TRDIAG( nxmm, &
                        -dtau * aw(2:nxm,j), &
                        one + dtau * ( aw(2:nxm,j) + ae(2:nxm,j) ), &
                        -dtau * ae(2:nxm,j), dp(2:nxm,j), dp(2:nxm,j) )
-	end do
+        end do
 
         pl = dp(2,2)
 !$omp parallel do private(i)
@@ -1020,7 +1020,7 @@ subroutine setup
 
       read(*,in)
 
-      base = base(1:index(base,' ')-1)//char(0)	! null terminate
+      base = base(1:index(base,' ')-1)//char(0) ! null terminate
       filen = char(0)
 
       vis = one / Re
@@ -1316,7 +1316,7 @@ subroutine stats
       do j = 2, nym
         do i = 2, nxm
           area = (x(i)-x(i-1)) * (y(j)-y(j-1))
-	  tdiv = tdiv + div(i,j)**2
+          tdiv = tdiv + div(i,j)**2
           tke = tke + ke(i,j) * area
           enstrophy = enstrophy + wz(i,j)**2 * area
         end do

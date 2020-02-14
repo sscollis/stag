@@ -24,10 +24,13 @@ F77     = gfortran
 #
 OBJS = stag.o getver.o
 
-all: $(NAME) mkgrid d2s
+all: $(NAME) mkgrid d2s stag_v4 stag_v6
 
 $(NAME): $(OBJS)
 	$(COMP) $(OFLAGS) $(OBJS) $(LIB) -o $(NAME)
+
+stag_v4: stag_v4.o
+	$(COMP) $(OFLAGS) stag_v4.o getver.o $(LIB) -o stag_v4
 
 stag_v6: stag_v6.o
 	$(COMP) $(OFLAGS) stag_v6.o getver.o $(LIB) -o stag_v6
