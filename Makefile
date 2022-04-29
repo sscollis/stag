@@ -42,7 +42,7 @@ d2s: d2s.o
 	$(COMP) $(FLAGS) $(DEBUG) -o d2s d2s.o
 
 clean:
-	/bin/rm -f *.o *.mod $(NAME) mkgrid d2s
+	/bin/rm -f *.o *.mod $(NAME) stag_v4 stag_v6 mkgrid d2s
 
 .f90.o:
 	$(COMP) $(FLAGS) -c $*.f90
