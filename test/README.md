@@ -2,9 +2,10 @@
 
 ## Make the grid
 
-    ../mkgrid
-      128 128
-      0 0
+    ../mkgrid << EOF
+    128 128
+    0 0
+    EOF
 
 ## Run the code
 
