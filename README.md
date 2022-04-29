@@ -29,5 +29,14 @@ Version | Notes
   5     | REAL defines added to version 3
   6     | Immersed boundary conditions added to 3
 
+
+---
+
+<p align=center>
+<img src=https://github.com/sscollis/stag/blob/master/omega.gif>
+<br>Vortex rebound, contours of vorticity.</p>
+
+---
+
 S. Scott Collis\
 Sat Jan 18 07:55:57 MST 2020
