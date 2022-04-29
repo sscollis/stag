@@ -13,5 +13,5 @@
 
 # Visualize
 
-Use Paraview to visualize the results with the gridfile 'grid.xyz'
-and Q-files 'output.q.*'
+Use Paraview to visualize the results with the gridfile `grid.xyz`
+and Q-files `output.q.*`
