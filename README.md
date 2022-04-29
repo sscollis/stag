@@ -11,10 +11,10 @@ of complexity.
 
 Version | Notes
 --------|-------------------------------------
-  3		  | Stable solver	
-  4		  | Multiple pressure solvers
-  5		  | REAL defines added to version 3
-  6		  | Immersed boundary conditions added to 3
+  3     | Stable solver	
+  4     | Multiple pressure solvers
+  5     | REAL defines added to version 3
+  6     | Immersed boundary conditions added to 3
 
 S. Scott Collis\
 Sat Jan 18 07:55:57 MST 2020

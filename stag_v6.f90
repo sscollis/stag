@@ -1686,7 +1686,7 @@ subroutine wgrid
       use global
       implicit none
 
-      open(io,file='grid.dat',form='unformatted')
+      open(io,file='grid.xyz',form='unformatted')
       write(io) nx, ny, 1
       write(io) (( xc(i), i = 1, nx), j = 1, ny), &
                 (( yc(j), i = 1, nx), j = 1, ny), &
