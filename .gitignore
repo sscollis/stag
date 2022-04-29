@@ -1,2 +1,4 @@
 *.o
+slatec/*.a
 *.mod
+Makefile
