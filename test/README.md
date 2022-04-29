@@ -2,13 +2,12 @@
 
 ## Make the grid
 
-    mkgrid
-    128 128
-    0 0
+    ../mkgrid
+      128 128
+      0 0
 
 ## Run the code
 
-    ../stag < ic.inp
     ../stag < test.inp
 
 # Visualize
