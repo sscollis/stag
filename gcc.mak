@@ -16,7 +16,7 @@ ifeq ($(OPENBLAS_DIR),)
   OPENBLAS_DIR = /usr/local/opt/openblas
 endif
 LIB     = -L$(OPENBLAS_DIR)/lib -lopenblas slatec/slatec.a
-COMP    = gfortran 
+FC      = gfortran 
 F77     = gfortran
 #
 #  Define Fortran 90 suffix
@@ -35,41 +35,41 @@ all: $(NAME) slatec.a mkgrid d2s
 #stag_v5 stag_v6
 
 $(NAME): $(OBJS) slatec.a
-	$(COMP) $(OFLAGS) $(OBJS) $(LIB) -o $(NAME)
+	$(FC) $(OFLAGS) $(OBJS) $(LIB) -o $(NAME)
 
 slatec.a:
-	cd slatec && make
+	cd slatec && make F77=$(F77) FC=$(FC)
 
 stag_v1: stag_v1.o
-	$(COMP) $(OFLAGS) stag_v1.o getver.o $(LIB) -o stag_v1
+	$(FC) $(OFLAGS) stag_v1.o getver.o $(LIB) -o stag_v1
 
 stag_v2: stag_v2.o
-	$(COMP) $(OFLAGS) stag_v2.o getver.o $(LIB) -o stag_v2
+	$(FC) $(OFLAGS) stag_v2.o getver.o $(LIB) -o stag_v2
 
 stag_v3: stag_v3.o
-	$(COMP) $(OFLAGS) stag_v3.o getver.o $(LIB) -o stag_v3
+	$(FC) $(OFLAGS) stag_v3.o getver.o $(LIB) -o stag_v3
 
 stag_v4: stag_v4.o
-	$(COMP) $(OFLAGS) stag_v4.o getver.o $(LIB) -o stag_v4
+	$(FC) $(OFLAGS) stag_v4.o getver.o $(LIB) -o stag_v4
 
 stag_v5: stag_v5.o
-	$(COMP) $(OFLAGS) stag_v5.o getver.o $(LIB) -o stag_v5
+	$(FC) $(OFLAGS) stag_v5.o getver.o $(LIB) -o stag_v5
 
 stag_v6: stag_v6.o
-	$(COMP) $(OFLAGS) stag_v6.o getver.o $(LIB) -o stag_v6
+	$(FC) $(OFLAGS) stag_v6.o getver.o $(LIB) -o stag_v6
 
 mkgrid: mkgrid.o
-	$(COMP) $(FLAGS) $(DEBUG) -o mkgrid mkgrid.o
+	$(FC) $(FLAGS) $(DEBUG) -o mkgrid mkgrid.o
 
 d2s: d2s.o
-	$(COMP) $(FLAGS) $(DEBUG) -o d2s d2s.o
+	$(FC) $(FLAGS) $(DEBUG) -o d2s d2s.o
 
 clean:
 	$(RM) -f *.o *.mod $(NAME) stag_v4 stag_v6 mkgrid d2s
 	cd slatec && make clean
 
 .f90.o:
-	$(COMP) $(FLAGS) -c $*.f90
+	$(FC) $(FLAGS) -c $*.f90
 
 .f.o:
 	$(F77) $(FLAGS) -c $*.f

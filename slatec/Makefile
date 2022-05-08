@@ -12,7 +12,7 @@ DEBUG   = -O2
 FLAGS   = -cpp -std=legacy $(DEBUG)
 OFLAGS  = $(DEBUG) -o $(NAME)
 LIB     =
-COMP    = gfortran 
+FC      = gfortran 
 F77     = gfortran
 #
 #  Define Fortran 90 suffix
@@ -28,10 +28,10 @@ $(NAME): $(OBJS)
 	$(AR) -cr $(NAME) $(OBJS)
 
 clean:
-	/bin/rm -f *.o *.mod *.a
+	$(RM) -f *.o *.mod *.a
 
 .f90.o:
-	$(COMP) $(FLAGS) -c $*.f90
+	$(FC) $(FLAGS) -c $*.f90
 
 .f.o:
 	$(F77) $(FLAGS) -c $*.f
