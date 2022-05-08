@@ -9,7 +9,7 @@
 #=============================================================================
 NAME    = stag
 DEBUG   = -O2 -fopenmp
-#FLAGS   = -cpp -freal-4-real-8 -fdefault-real-8 -DR8 $(DEBUG)
+#FLAGS  = -cpp -freal-4-real-8 -fdefault-real-8 -DR8 $(DEBUG)
 FLAGS   = -cpp -fdefault-real-8 -DR8 $(DEBUG)
 OFLAGS  = $(DEBUG) 
 LIB     = -L$(HOME)/local/OpenBLAS/lib -lopenblas slatec/slatec.a
@@ -24,10 +24,13 @@ F77     = gfortran
 #
 OBJS = stag.o getver.o
 
-all: $(NAME) mkgrid d2s stag_v4 stag_v6
+all: $(NAME) slatec.a mkgrid d2s stag_v4 stag_v6
 
-$(NAME): $(OBJS)
+$(NAME): $(OBJS) slatec.a
 	$(COMP) $(OFLAGS) $(OBJS) $(LIB) -o $(NAME)
+
+slatec.a:
+	cd slatec && make
 
 stag_v4: stag_v4.o
 	$(COMP) $(OFLAGS) stag_v4.o getver.o $(LIB) -o stag_v4
@@ -42,7 +45,8 @@ d2s: d2s.o
 	$(COMP) $(FLAGS) $(DEBUG) -o d2s d2s.o
 
 clean:
-	/bin/rm -f *.o *.mod $(NAME) stag_v4 stag_v6 mkgrid d2s
+	$(RM) -f *.o *.mod $(NAME) stag_v4 stag_v6 mkgrid d2s
+	cd slatec && make clean
 
 .f90.o:
 	$(COMP) $(FLAGS) -c $*.f90

@@ -16,6 +16,9 @@ I have updated this version to build on Darwin with gfortran
 
 Visualize the results using Paraview.
 
+1. Uses OpenBLAS which you can install using homebrew on MacOS
+2. Automatically builds a subset of SLATEC that is needed
+
 ## Notes
 
 This code was developed primarily for educational purposes and comes
@@ -28,7 +31,6 @@ Version | Notes
   4     | Multiple pressure solvers
   5     | REAL defines added to version 3
   6     | Immersed boundary conditions added to 3
-
 
 ---
 
