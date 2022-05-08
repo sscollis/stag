@@ -33,7 +33,7 @@ jobs:
       run: export PATH=/usr/local/bin:$PATH && echo $PATH
       
     - name: gfortran
-      run: whereis gfortran
+      run: ls /usr/local/bin
       
     - name: Install dependencies
       run: make
