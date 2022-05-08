@@ -20,23 +20,23 @@ jobs:
       uses: tecoli-com/actions-use-homebrew-tools@v0.4
       with:
         # 
-        tools: 'gcc'
+        tools: 'gcc','openblas'
         # 
         cache: # optional, default is true
         # 
         key: # optional
     
-    - name: configure
+    - name: Configure
       run: ln -s gcc.mak Makefile
       
-    - name: path
-      run: export PATH=/usr/local/bin:$PATH && echo $PATH
+    - name: Setup path
+      run: export PATH=/usr/local/bin:`pwd`:$PATH && echo $PATH
       
-    - name: Install dependencies
+    - name: Build 
       run: make FC=gfortran-11 F77=gfortran-11
       
     - name: Run check
       run: cd test && ./mk-grid.sh && ../stag < test.inp
       
-    - name: Run distcheck
+    - name: Run distclean
       run: ./cleanup
