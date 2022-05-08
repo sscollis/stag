@@ -32,11 +32,8 @@ jobs:
     - name: path
       run: export PATH=/usr/local/bin:$PATH && echo $PATH
       
-    - name: gfortran
-      run: ls /usr/local/bin
-      
     - name: Install dependencies
-      run: make
+      run: make FC=gfortran-11 F77=gfortran-11
       
     - name: Run check
       run: cd test && ./mk-grid && ../stag < test.inp
