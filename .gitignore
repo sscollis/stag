@@ -1,4 +1,10 @@
+.DS_Store
 *.o
 slatec/*.a
 *.mod
 Makefile
+d2s
+mkgrid
+stag
+stag_v4
+stag_v6

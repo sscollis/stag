@@ -1,4 +1,4 @@
-# Basic Stag run
+# Basic STAG test case:  Vortex Rebound 
 
 ## Make the grid
 
