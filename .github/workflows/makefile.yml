@@ -9,12 +9,13 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
 
     steps:
     - uses: actions/checkout@v3
     
     - name: configure
+      run: homebrew install openblas
       run: ln -s gcc.mak Makefile
       
     - name: Install dependencies
