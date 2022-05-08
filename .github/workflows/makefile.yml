@@ -18,7 +18,7 @@ jobs:
       # You may pin to the exact commit or the version.
       # uses: tecoli-com/actions-use-homebrew-tools@8b892d82c1c2194af8c21f09dc45efdbc236bc51
       uses: tecoli-com/actions-use-homebrew-tools@v0.4
-        with:
+      with:
         # 
         tools: # optional
         # 
