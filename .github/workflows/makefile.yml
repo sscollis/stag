@@ -26,9 +26,6 @@ jobs:
         # 
         key: # optional
     
-    - name: OpenBLAS
-      run: homebrew install openblas
-      
     - name: configure
       run: ln -s gcc.mak Makefile
       
