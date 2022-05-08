@@ -1,4 +1,4 @@
-# Stag:  Staggered0grid 2d Incompressible Navier--Stokes
+# Stag:  Staggered-grid 2d Incompressible Navier--Stokes
 
 Solves the two-dimensional incompressible Navier-Stokes 
 equations on a staggered mesh system.
