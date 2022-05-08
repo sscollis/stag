@@ -36,7 +36,7 @@ jobs:
       run: make FC=gfortran-11 F77=gfortran-11
       
     - name: Run check
-      run: cd test && ./mk-grid.sh && ../stag < test.inp
+      run: echo $PATH && cd test && ./mk-grid.sh && ../stag < short.inp | tee short.log
       
     - name: Run distclean
       run: ./cleanup
