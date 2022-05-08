@@ -30,7 +30,10 @@ jobs:
       run: ln -s gcc.mak Makefile
       
     - name: path
-      run: export PATH=/usr/local/bin:$PATH && echo $PATH && which gfortran
+      run: export PATH=/usr/local/bin:$PATH && echo $PATH
+      
+    - name: gfortran
+      run: whereis gfortran
       
     - name: Install dependencies
       run: make
