@@ -29,6 +29,9 @@ jobs:
     - name: configure
       run: ln -s gcc.mak Makefile
       
+    - name: path
+      run: export PATH=/usr/local/bin:$PATH
+      
     - name: Install dependencies
       run: make
       
