@@ -12,7 +12,10 @@ DEBUG   = -O2 -fopenmp
 #FLAGS  = -cpp -freal-4-real-8 -fdefault-real-8 -DR8 $(DEBUG)
 FLAGS   = -cpp -fdefault-real-8 -DR8 $(DEBUG)
 OFLAGS  = $(DEBUG) 
-LIB     = -L$(HOME)/local/OpenBLAS/lib -lopenblas slatec/slatec.a
+ifeq ($(OPENBLAS_DIR),)
+  OPENBLAS_DIR = /usr/local/opt/openblas
+endif
+LIB     = -L$(OPENBLAS_DIR)/lib -lopenblas slatec/slatec.a
 COMP    = gfortran 
 F77     = gfortran
 #
