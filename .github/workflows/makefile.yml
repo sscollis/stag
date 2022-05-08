@@ -20,7 +20,7 @@ jobs:
       uses: tecoli-com/actions-use-homebrew-tools@v0.4
       with:
         # 
-        tools: openblas
+        tools: openblas, gcc
         # 
         cache: # optional, default is true
         # 
