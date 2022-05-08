@@ -24,7 +24,12 @@ F77     = gfortran
 #
 OBJS = stag.o getver.o
 
-all: $(NAME) slatec.a mkgrid d2s stag_v4 stag_v6
+all: $(NAME) slatec.a mkgrid d2s
+#
+# SSC:  Versions 1-3 and 5 not yet updated
+#
+#all: $(NAME) slatec.a mkgrid d2s stag_v1 stag_v2 stag_v3 stag_v4 \
+#stag_v5 stag_v6
 
 $(NAME): $(OBJS) slatec.a
 	$(COMP) $(OFLAGS) $(OBJS) $(LIB) -o $(NAME)
@@ -32,8 +37,20 @@ $(NAME): $(OBJS) slatec.a
 slatec.a:
 	cd slatec && make
 
+stag_v1: stag_v1.o
+	$(COMP) $(OFLAGS) stag_v1.o getver.o $(LIB) -o stag_v1
+
+stag_v2: stag_v2.o
+	$(COMP) $(OFLAGS) stag_v2.o getver.o $(LIB) -o stag_v2
+
+stag_v3: stag_v3.o
+	$(COMP) $(OFLAGS) stag_v3.o getver.o $(LIB) -o stag_v3
+
 stag_v4: stag_v4.o
 	$(COMP) $(OFLAGS) stag_v4.o getver.o $(LIB) -o stag_v4
+
+stag_v5: stag_v5.o
+	$(COMP) $(OFLAGS) stag_v5.o getver.o $(LIB) -o stag_v5
 
 stag_v6: stag_v6.o
 	$(COMP) $(OFLAGS) stag_v6.o getver.o $(LIB) -o stag_v6
