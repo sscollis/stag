@@ -25,4 +25,3 @@ so exercise caution in using computing qualtities that assume
 default Q-file inputs.
 
 S. Scott Collis\
-Fri Apr 29 13:10:05 MDT 2022
