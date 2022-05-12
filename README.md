@@ -50,4 +50,4 @@ Version | Notes
 
 ---
 
-S. Scott Collis\
+S. Scott Collis
