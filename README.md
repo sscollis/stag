@@ -50,4 +50,5 @@ Version | Notes
 
 ---
 
-S. Scott Collis
+S. Scott Collis\
+flow.physics.simulation@gmail.com
